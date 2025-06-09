@@ -1,0 +1,19 @@
+{
+  "actions": [
+    {
+      "name": "create_contract",
+      "method": "POST",
+      "path": "/api/v1/generate/contract"
+    },
+    {
+      "name": "list_clients",
+      "method": "GET",
+      "path": "/api/v1/clients"
+    },
+    {
+      "name": "get_case",
+      "method": "GET",
+      "path": "/api/v1/cases/{case_id}"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+openapi: 3.0.2
+info:
+  title: Symbios Legal Core API
+  version: "1.0"
+paths:
+  /api/v1/generate/contract:
+    post:
+      summary: Generate contract
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                client_id:
+                  type: integer
+                template_name:
+                  type: string
+      responses:
+        '200':
+          description: Generated contract
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  filename:
+                    type: string
+  /api/v1/clients:
+    get:
+      summary: List clients
+      responses:
+        '200':
+          description: Clients
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Client'
+components:
+  schemas:
+    Client:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string

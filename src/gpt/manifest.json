@@ -1,0 +1,16 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "Symbios Legal Core GPT",
+  "name_for_model": "symbios_legal_core",
+  "description_for_human": "Generate and manage legal documents & workflows.",
+  "description_for_model": "You are Symbios Legal Core. Use the APIs to create and manage contracts, cases, templates, clients, etc.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://YOUR_DOMAIN/openapi.yaml"
+  },
+  "contact_email": "legal@symbios.ai",
+  "legal_info_url": "https://YOUR_DOMAIN/legal"
+}
