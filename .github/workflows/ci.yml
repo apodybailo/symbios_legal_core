@@ -1,7 +1,14 @@
 name: CI
+
 on:
-  pull_request:
+  push:            # ← реагує на будь-який пуш у main
     branches: [ "main" ]
+  pull_request:    # ← і на PR у main
+    branches: [ "main" ]
+
+permissions:
+  contents: read   # потрібен checkout
+
 jobs:
   build-test:
     runs-on: ubuntu-latest
@@ -17,4 +24,4 @@ jobs:
       - name: Lint
         run: ruff check .
       - name: Test
-        run: pytest
+        run: pytest -q
