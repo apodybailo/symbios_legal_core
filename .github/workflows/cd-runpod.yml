@@ -4,6 +4,9 @@ on:
     tags:
       - 'v*.*.*'
 jobs:
+  permissions:
+  contents: read
+  packages: write
   deploy:
     runs-on: ubuntu-latest
     environment: production
