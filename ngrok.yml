@@ -1,0 +1,6 @@
+version: 2
+authtoken: your-ngrok-token
+tunnels:
+  legal_core:
+    proto: http
+    addr: 8000
