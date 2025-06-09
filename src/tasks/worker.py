@@ -1,4 +1,3 @@
-import os
 from celery import Celery
 from ..settings_loader import get_settings
 settings = get_settings()
