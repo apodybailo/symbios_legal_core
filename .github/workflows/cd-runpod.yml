@@ -1,12 +1,14 @@
 name: CD RunPod
+
 on:
   push:
     tags:
       - 'v*.*.*'
-jobs:
-  permissions:
+
+permissions:
   contents: read
   packages: write
+jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: production
