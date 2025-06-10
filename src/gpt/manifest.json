@@ -11,7 +11,6 @@
   "type": "openapi",
   "url": "https://symbios-legal-core-empty-snow-5174.fly.dev/.well-known/openapi.yaml",
   "has_user_authentication": false
-}
   },
   "contact_email": "legal@symbios.ai",
   "legal_info_url": "https://YOUR_DOMAIN/legal"
