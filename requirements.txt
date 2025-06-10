@@ -21,3 +21,4 @@ openai
 pytest
 pytest-asyncio
 ruff
+minio>=7.1.0
