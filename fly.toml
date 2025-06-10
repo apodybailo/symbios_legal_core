@@ -1,27 +1,22 @@
-# fly.toml app configuration file generated for symbios-legal-core-empty-snow-5174 on 2025-06-09T16:53:49+03:00
-#
-# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
-#
-
-app = 'symbios-legal-core-empty-snow-5174'
-primary_region = 'ams'
+app = "symbios-legal-core-empty-snow-5174"
+primary_region = "ams"
 
 [build]
-  dockerfile = 'Dockerfile'
+  dockerfile = "Dockerfile"
 
 [env]
-  DATABASE_URL = 'sqlite:///data/legal_db.sqlite'
-  ENV = 'prod'
+  ENV           = "prod"
+  DATABASE_URL  = "sqlite:///data/legal_db.sqlite"
 
 [http_service]
-  internal_port = 8080
-  force_https = true
-  auto_stop_machines = 'stop'
-  auto_start_machines = true
-  min_machines_running = 0
-  processes = ['app']
+  internal_port        = 8000          # ✅ збігається з uvicorn --port 8000
+  force_https          = true
+  auto_start_machines  = true
+  auto_stop_machines   = true          # ❗️ не рядок "stop", має бути true/false
+  min_machines_running = 0             # 0 = cold-start, 1 = тримати постійно
+  processes            = ["app"]       # опційно; можна прибрати
 
 [[vm]]
-  memory = '1gb'
-  cpu_kind = 'shared'
-  cpus = 1
+  cpu_kind = "shared"
+  cpus     = 1
+  memory   = "1gb"

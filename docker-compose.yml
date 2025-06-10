@@ -1,19 +1,25 @@
-version: "3.9"
+# docker-compose.yml
 services:
   db:
     image: postgres:16-alpine
     environment:
-      POSTGRES_PASSWORD: legalcore
       POSTGRES_USER: legalcore
+      POSTGRES_PASSWORD: legalcore
       POSTGRES_DB: legalcore
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U legalcore"]
       interval: 10s
       retries: 5
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
   redis:
     image: redis:7-alpine
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      retries: 5
+
   minio:
     image: minio/minio
     command: server /data --console-address ":9001"
@@ -23,15 +29,27 @@ services:
     ports:
       - "9000:9000"
       - "9001:9001"
+    healthcheck:
+      test: ["CMD", "mc", "alias", "set", "local", "http://minio:9000", "minio", "minio123"]
+      interval: 10s
+      retries: 5
+
   legal_core:
     build: .
-    command: uvicorn src.api.v1.main:router --factory --host 0.0.0.0 --port 8000 --reload
+    command: uvicorn src.app:app --host 0.0.0.0 --port 8000 --reload
     volumes:
       - .:/app
     env_file:
-      - .env.example
+      - .env
     depends_on:
       db:
         condition: service_healthy
       redis:
         condition: service_healthy
+      minio:
+        condition: service_started
+    ports:
+      - "8000:8000"
+
+volumes:
+  db_data:

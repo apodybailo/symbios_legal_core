@@ -3,31 +3,41 @@ name: CD RunPod
 on:
   push:
     tags:
-      - 'v*.*.*'
+      - 'v*.*.*'         # деплой лише на теги
 
 permissions:
   contents: read
-  packages: write
+  packages: write        # дозволяє пуш у GHCR
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: production
+
     steps:
       - uses: actions/checkout@v3
+
       - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-      - name: Build & Push Docker
+
+      # ---------- Build & Push ----------
+      - name: Build & push image to GHCR
         env:
-          REGISTRY: ghcr.io
-          IMAGE_NAME: ${{ github.repository }}
+          IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/symbios_legal_core
         run: |
-          echo "Building image..."
-          docker build -t $REGISTRY/$IMAGE_NAME:${{ github.sha }} .
-          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-          docker push $REGISTRY/$IMAGE_NAME:${{ github.sha }}
+          echo ${{ secrets.GITHUB_TOKEN }} | \
+            docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          docker build -t $IMAGE_NAME:${{ github.sha }} .
+          docker push $IMAGE_NAME:${{ github.sha }}
+
+      # ---------- Deploy ----------
       - name: Deploy to RunPod
         env:
           RUNPOD_API_KEY: ${{ secrets.RUNPOD_API_KEY }}
+          POD_ID: 145458sphepiup                 # ← свій pod_id
+          IMAGE: ghcr.io/${{ github.repository_owner }}/symbios_legal_core:${{ github.sha }}
         run: |
-          echo "Trigger RunPod deploy via API (stub)"
+          curl -X POST "https://api.runpod.ai/v2/${POD_ID}/start" \
+               -H "Authorization: ${RUNPOD_API_KEY}" \
+               -H "Content-Type: application/json" \
+               -d '{"containerImage": "'"$IMAGE"'" }'
